@@ -16,4 +16,7 @@ upmigrate:
 downmigrate:
 	migrate -path db/migrations -database "postgresql://postgres:postgres@localhost:5432/si_bank?sslmode=disable" -verbose down
 
-.PHONY: postgres createdb dropdb pshell upmigrate downmigrate
+sqlc:
+	sqlc generate
+
+.PHONY: postgres createdb dropdb pshell upmigrate downmigrate sqlc
