@@ -10,10 +10,16 @@ dropdb:
 pshell:
 	docker exec -it postgresql psql -U postgres
 
+create-migration:
+	migrate create -ext sql -dir db/migrations -seq $(arg) # make create-migration arg=schema_name
+
 upmigrate:
 	migrate -path db/migrations -database "postgresql://postgres:postgres@localhost:5432/si_bank?sslmode=disable" -verbose up
 
 downmigrate:
 	migrate -path db/migrations -database "postgresql://postgres:postgres@localhost:5432/si_bank?sslmode=disable" -verbose down
 
-.PHONY: postgres createdb dropdb pshell upmigrate downmigrate
+sqlc:
+	sqlc generate
+
+.PHONY: postgres createdb dropdb pshell create-migration upmigrate downmigrate sqlc
