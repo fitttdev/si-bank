@@ -22,4 +22,7 @@ downmigrate:
 sqlc:
 	sqlc generate
 
-.PHONY: postgres createdb dropdb pshell create-migration upmigrate downmigrate sqlc
+test:
+	go test -v -cover ./...
+
+.PHONY: postgres createdb dropdb pshell create-migration upmigrate downmigrate sqlc test
