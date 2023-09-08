@@ -11,6 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// Account Tests
 func createAccountFactory(t *testing.T) Account {
 	args := CreateAccountParams{
 		Owner: faker.Name(),
@@ -102,4 +103,43 @@ func TestListAccounts(t *testing.T) {
 	for _, account := range accounts {
 		require.NotEmpty(t, account)
 	}
+}
+
+
+// Entry Tests
+func createEntryFactory(t *testing.T) Entry {
+	account := createAccountFactory(t)
+
+	args := CreateEntryParams{
+		AccountID: account.ID,
+		Amount: 100,
+	}
+	entry, err := testQueries.CreateEntry(context.Background(), args)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, entry)
+
+	require.Equal(t, args.AccountID, account.ID)
+	require.Equal(t, args.Amount, entry.Amount)
+
+	return entry
+}
+
+
+func TestUpdateEntry(t *testing.T) {
+	entry1 := createEntryFactory(t)
+
+	args := UpdateEntryParams{
+		ID:      entry1.ID,
+		Amount: 200,
+	}
+
+	entry2, err := testQueries.UpdateEntry(context.Background(), args)
+	require.NoError(t, err)
+	require.NotEmpty(t, entry2)
+
+	require.Equal(t, entry1.ID, entry2.ID)
+	require.NotEqual(t, entry1.Amount, entry2.Amount)
+	require.Equal(t, args.Amount, entry2.Amount)
+	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second)
 }
