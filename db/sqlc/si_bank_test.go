@@ -14,8 +14,8 @@ import (
 // Account Tests
 func createAccountFactory(t *testing.T) Account {
 	args := CreateAccountParams{
-		Owner: faker.Name(),
-		Balance: rand.Float64(),
+		Owner:    faker.Name(),
+		Balance:  rand.Float64(),
 		Currency: faker.Currency(),
 	}
 	account, err := testQueries.CreateAccount(context.Background(), args)
@@ -36,7 +36,6 @@ func createAccountFactory(t *testing.T) Account {
 func TestCreateAccount(t *testing.T) {
 	createAccountFactory(t)
 }
-
 
 func TestGetAccount(t *testing.T) {
 	account1 := createAccountFactory(t)
@@ -71,11 +70,10 @@ func TestUpdateAccount(t *testing.T) {
 	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
 }
 
-
 func TestDeleteAccount(t *testing.T) {
 	account1 := createAccountFactory(t)
 
-  err := testQueries.DeleteAccount(context.Background(), account1.ID)
+	err := testQueries.DeleteAccount(context.Background(), account1.ID)
 	require.NoError(t, err)
 
 	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
@@ -84,14 +82,13 @@ func TestDeleteAccount(t *testing.T) {
 	require.Empty(t, account2)
 }
 
-
 func TestListAccounts(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		createAccountFactory(t)
 	}
 
 	args := ListAccountsParams{
-		Limit: 5,
+		Limit:  5,
 		Offset: 5,
 	}
 
@@ -105,14 +102,13 @@ func TestListAccounts(t *testing.T) {
 	}
 }
 
-
 // Entry Tests
 func createEntryFactory(t *testing.T) Entry {
 	account := createAccountFactory(t)
 
 	args := CreateEntryParams{
 		AccountID: account.ID,
-		Amount: 100,
+		Amount:    100,
 	}
 	entry, err := testQueries.CreateEntry(context.Background(), args)
 
@@ -125,12 +121,11 @@ func createEntryFactory(t *testing.T) Entry {
 	return entry
 }
 
-
 func TestUpdateEntry(t *testing.T) {
 	entry1 := createEntryFactory(t)
 
 	args := UpdateEntryParams{
-		ID:      entry1.ID,
+		ID:     entry1.ID,
 		Amount: 200,
 	}
 
